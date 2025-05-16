@@ -53,6 +53,7 @@ interface Employee {
   id: string;
   user_id: string;
   first_name: string;
+  middle_name?: string;
   last_name: string;
   email: string;
   role: string;
@@ -64,6 +65,9 @@ interface Employee {
     entity_name?: string;
     region_name?: string;
   }[];
+  preferred_name?: string;
+  job_title?: string;
+  status?: string;
 }
 
 export default function EmployeeManagement() {
@@ -80,6 +84,7 @@ export default function EmployeeManagement() {
   const [employeeForm, setEmployeeForm] = useState({
     id: "",
     first_name: "",
+    middle_name: "",
     last_name: "",
     email: "",
     role: "agent",
@@ -263,6 +268,7 @@ export default function EmployeeManagement() {
       setEmployeeForm({
         id: "",
         first_name: "",
+        middle_name: "",
         last_name: "",
         email: "",
         role: "agent",
@@ -284,6 +290,7 @@ export default function EmployeeManagement() {
     setEmployeeForm({
       id: employee.id,
       first_name: employee.first_name,
+      middle_name: employee.middle_name,
       last_name: employee.last_name,
       email: employee.email,
       role: employee.role,
@@ -362,6 +369,15 @@ export default function EmployeeManagement() {
                       value={employeeForm.first_name}
                       onChange={handleEmployeeChange}
                       required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="middle_name">Middle Name</Label>
+                    <Input
+                      id="middle_name"
+                      name="middle_name"
+                      value={employeeForm.middle_name}
+                      onChange={handleEmployeeChange}
                     />
                   </div>
                   <div className="space-y-2">
@@ -626,7 +642,16 @@ export default function EmployeeManagement() {
                 employees.map((employee) => (
                   <TableRow key={employee.id}>
                     <TableCell className="font-medium">
-                      {employee.first_name} {employee.last_name}
+                      {employee.first_name}{" "}
+                      {employee.middle_name
+                        ? employee.middle_name.charAt(0) + ". "
+                        : ""}
+                      {employee.last_name}
+                      {employee.preferred_name && (
+                        <span className="text-xs text-muted-foreground ml-1">
+                          (Preferred: {employee.preferred_name})
+                        </span>
+                      )}
                     </TableCell>
                     <TableCell>{employee.email}</TableCell>
                     <TableCell>

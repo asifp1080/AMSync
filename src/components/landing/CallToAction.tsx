@@ -19,7 +19,7 @@ export default function CallToAction() {
               className="bg-white text-blue-600 hover:bg-white/90"
               asChild
             >
-              <Link to="/dashboard">Get a Demo</Link>
+              <Link to="dashboard">Get a Demo</Link>
             </Button>
             <Button
               variant="outline"

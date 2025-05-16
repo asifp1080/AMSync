@@ -27,16 +27,13 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 // Routes are now defined directly in the App component
 
 function App() {
-  // Create a separate element for tempo routes
-  const tempoRoutesElement = import.meta.env.VITE_TEMPO
-    ? useRoutes(routes)
-    : null;
-
   return (
     <AuthProvider>
       <ThemeProvider>
         <LocationProvider>
-          {tempoRoutesElement}
+          {/* Tempo routes - must be outside of Routes component */}
+          {import.meta.env.VITE_TEMPO && useRoutes(routes)}
+
           <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             <Route
@@ -58,7 +55,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             {/* For the tempo routes */}
-            {import.meta.env.VITE_TEMPO && <Route path="/tempobook/*" />}
+            {import.meta.env.VITE_TEMPO && (
+              <Route path="/tempobook/*" element={<div />} />
+            )}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </LocationProvider>

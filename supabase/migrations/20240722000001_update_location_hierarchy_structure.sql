@@ -42,8 +42,11 @@ WHERE locations.region_id = regions.id;
 
 -- Make entity_id a foreign key
 ALTER TABLE locations
-ALTER COLUMN entity_id SET NOT NULL,
-ADD CONSTRAINT locations_entity_id_fkey FOREIGN KEY (entity_id) REFERENCES entities(id);
+ALTER COLUMN entity_id SET NOT NULL;
+
+-- Drop the constraint if it exists before adding it
+ALTER TABLE locations DROP CONSTRAINT IF EXISTS locations_entity_id_fkey;
+ALTER TABLE locations ADD CONSTRAINT locations_entity_id_fkey FOREIGN KEY (entity_id) REFERENCES entities(id);
 
 -- Update user_roles table to reflect new hierarchy
 ALTER TABLE user_roles ADD COLUMN IF NOT EXISTS organization_id UUID REFERENCES organizations(id);

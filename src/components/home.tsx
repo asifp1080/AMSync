@@ -86,48 +86,34 @@ const Home = () => {
 
   return (
     <DashboardProvider>
-      <div className="flex h-screen bg-background">
+      <div className="flex h-screen bg-background relative">
         {/* Sidebar */}
         <div
           className={`${sidebarOpen ? "w-64" : "w-20"} bg-card border-r border-border transition-all duration-300 flex flex-col`}
           onMouseEnter={() => setSidebarHovered(true)}
           onMouseLeave={() => setSidebarHovered(false)}
         >
-          <div className="p-4 border-b border-border flex items-center justify-between h-16">
-            {sidebarOpen ? (
-              <h1 className="text-xl font-bold">Agency Manager</h1>
-            ) : (
-              <h1 className="text-xl font-bold">AM</h1>
-            )}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleSidebar}
-              className="lg:hidden"
-            >
+          <div className="p-4 border-b border-border flex items-center justify-between h-16 relative">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleSidebar}
+                className="flex justify-center items-center"
+              >
+                {sidebarOpen ? (
+                  <X className="h-5 w-5" />
+                ) : (
+                  <Menu className="h-5 w-5" />
+                )}
+              </Button>
               {sidebarOpen ? (
-                <X className="h-5 w-5" />
+                <h1 className="text-xl font-bold">Agency Manager</h1>
               ) : (
-                <Menu className="h-5 w-5" />
+                <h1 className="text-xl font-bold">AM</h1>
               )}
-            </Button>
+            </div>
           </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleSidebar}
-            className={
-              `hidden lg:flex ${sidebarHovered || sidebarOpen ? "opacity-100" : "opacity-0"} transition-opacity duration-200` +
-              " justify-center items-center flex-row relative top-0 left-0  right-auto"
-            }
-          >
-            {sidebarOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
 
           <nav className="flex-1 p-4 space-y-2">
             <Button

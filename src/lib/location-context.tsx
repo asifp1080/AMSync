@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { supabase } from "./supabase";
 import { useAuth } from "./auth-context";
 
@@ -47,13 +47,13 @@ interface GroupLocation {
 
 interface UserRole {
   role:
+    | "organization_admin"
     | "entity_admin"
-    | "regional_manager"
     | "location_manager"
     | "agent"
     | "staff";
+  organization_id: string | null;
   entity_id: string | null;
-  region_id: string | null;
   location_id: string | null;
 }
 
@@ -168,7 +168,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
       const { data: groupsData, error: groupsError } = await supabase
         .from("groups")
         .select()
-        .order("id"); // Changed from name to id since name column doesn't exist
+        .order("id");
 
       if (groupsError) throw groupsError;
       setGroups(groupsData || []);
@@ -356,14 +356,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
     if (userRole.role === "entity_admin" && userRole.entity_id) {
       const location = locations.find((l) => l.id === locationId);
       if (!location) return false;
-
-      const region = regions.find((r) => r.id === location.region_id);
-      return region?.entity_id === userRole.entity_id;
-    }
-
-    if (userRole.role === "regional_manager" && userRole.region_id) {
-      const location = locations.find((l) => l.id === locationId);
-      return location?.region_id === userRole.region_id;
+      return location.entity_id === userRole.entity_id;
     }
 
     if (userRole.role === "location_manager" || userRole.role === "agent") {
@@ -373,25 +366,41 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
     return false;
   };
 
-  const value = {
-    entities,
-    regions,
-    locations,
-    groups,
-    groupLocations,
-    userRole,
-    userEntities,
-    userRegions,
-    userLocations,
-    currentLocation,
-    setCurrentLocation,
-    loading,
-    error,
-    refreshData: fetchData,
-    hasAccessToEntity,
-    hasAccessToRegion,
-    hasAccessToLocation,
-  };
+  const value = useMemo(
+    () => ({
+      entities,
+      regions,
+      locations,
+      groups,
+      groupLocations,
+      userRole,
+      userEntities,
+      userRegions,
+      userLocations,
+      currentLocation,
+      setCurrentLocation,
+      loading,
+      error,
+      refreshData: fetchData,
+      hasAccessToEntity,
+      hasAccessToRegion,
+      hasAccessToLocation,
+    }),
+    [
+      entities,
+      regions,
+      locations,
+      groups,
+      groupLocations,
+      userRole,
+      userEntities,
+      userRegions,
+      userLocations,
+      currentLocation,
+      loading,
+      error,
+    ],
+  );
 
   return (
     <LocationContext.Provider value={value}>
@@ -400,7 +409,7 @@ export function LocationProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Export the hook directly as a named function
+// Export the hook as a function declaration to fix HMR invalidation
 export function useLocation() {
   const context = useContext(LocationContext);
   if (context === undefined) {

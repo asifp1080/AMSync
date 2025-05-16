@@ -1,0 +1,20 @@
+-- Add missing columns to organizations table
+ALTER TABLE organizations
+  ADD COLUMN IF NOT EXISTS primary_contact_name TEXT,
+  ADD COLUMN IF NOT EXISTS primary_contact_email TEXT,
+  ADD COLUMN IF NOT EXISTS primary_contact_phone TEXT,
+  ADD COLUMN IF NOT EXISTS address_line_1 TEXT,
+  ADD COLUMN IF NOT EXISTS address_line_2 TEXT,
+  ADD COLUMN IF NOT EXISTS city TEXT,
+  ADD COLUMN IF NOT EXISTS state TEXT,
+  ADD COLUMN IF NOT EXISTS zip_code TEXT,
+  ADD COLUMN IF NOT EXISTS country TEXT,
+  ADD COLUMN IF NOT EXISTS logo_url TEXT,
+  ADD COLUMN IF NOT EXISTS website TEXT,
+  ADD COLUMN IF NOT EXISTS industry TEXT,
+  ADD COLUMN IF NOT EXISTS tax_id TEXT,
+  ADD COLUMN IF NOT EXISTS billing_email TEXT,
+  ADD COLUMN IF NOT EXISTS billing_address TEXT,
+  ADD COLUMN IF NOT EXISTS subscription_tier TEXT,
+  ADD COLUMN IF NOT EXISTS subscription_status TEXT,
+  ADD COLUMN IF NOT EXISTS subscription_renewal_date TIMESTAMP WITH TIME ZONE;

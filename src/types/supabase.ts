@@ -183,11 +183,13 @@ export type Database = {
           created_at: string | null
           default_currency: string | null
           description: string | null
+          e_and_o_liability_coverage: string | null
           e_and_o_policy_expiration_date: string | null
           e_and_o_policy_number: string | null
           ein: string | null
           email_marketing_enabled: boolean | null
           entity_type: string
+          gl_liability_coverage: string | null
           gl_policy_expiration_date: string | null
           gl_policy_number: string | null
           headquarters_address: string | null
@@ -197,6 +199,7 @@ export type Database = {
           license_expiration_date: string | null
           license_number: string | null
           name: string
+          organization_id: string | null
           preferred_notification_channels: string[] | null
           primary_contact_email: string | null
           primary_contact_name: string | null
@@ -217,11 +220,13 @@ export type Database = {
           created_at?: string | null
           default_currency?: string | null
           description?: string | null
+          e_and_o_liability_coverage?: string | null
           e_and_o_policy_expiration_date?: string | null
           e_and_o_policy_number?: string | null
           ein?: string | null
           email_marketing_enabled?: boolean | null
           entity_type: string
+          gl_liability_coverage?: string | null
           gl_policy_expiration_date?: string | null
           gl_policy_number?: string | null
           headquarters_address?: string | null
@@ -231,6 +236,7 @@ export type Database = {
           license_expiration_date?: string | null
           license_number?: string | null
           name: string
+          organization_id?: string | null
           preferred_notification_channels?: string[] | null
           primary_contact_email?: string | null
           primary_contact_name?: string | null
@@ -251,11 +257,13 @@ export type Database = {
           created_at?: string | null
           default_currency?: string | null
           description?: string | null
+          e_and_o_liability_coverage?: string | null
           e_and_o_policy_expiration_date?: string | null
           e_and_o_policy_number?: string | null
           ein?: string | null
           email_marketing_enabled?: boolean | null
           entity_type?: string
+          gl_liability_coverage?: string | null
           gl_policy_expiration_date?: string | null
           gl_policy_number?: string | null
           headquarters_address?: string | null
@@ -265,6 +273,7 @@ export type Database = {
           license_expiration_date?: string | null
           license_number?: string | null
           name?: string
+          organization_id?: string | null
           preferred_notification_channels?: string[] | null
           primary_contact_email?: string | null
           primary_contact_name?: string | null
@@ -278,7 +287,92 @@ export type Database = {
           uploaded_documents?: Json | null
           zip_code?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "entities_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      group_locations: {
+        Row: {
+          added_on: string | null
+          group_id: string
+          location_id: string
+          mapping_id: string
+        }
+        Insert: {
+          added_on?: string | null
+          group_id: string
+          location_id: string
+          mapping_id?: string
+        }
+        Update: {
+          added_on?: string | null
+          group_id?: string
+          location_id?: string
+          mapping_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_locations_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "group_locations_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string | null
+          group_description: string | null
+          group_manager_id: string | null
+          group_name: string
+          group_tags: string[] | null
+          id: string
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          group_description?: string | null
+          group_manager_id?: string | null
+          group_name: string
+          group_tags?: string[] | null
+          id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          group_description?: string | null
+          group_manager_id?: string | null
+          group_name?: string
+          group_tags?: string[] | null
+          id?: string
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "groups_group_manager_id_fkey"
+            columns: ["group_manager_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       locations: {
         Row: {
@@ -292,6 +386,7 @@ export type Database = {
           country: string | null
           created_at: string | null
           email: string | null
+          entity_id: string
           hours_of_operation: string | null
           id: string
           ip_whitelist: string[] | null
@@ -303,7 +398,6 @@ export type Database = {
           primary_contact_email: string | null
           primary_contact_name: string | null
           primary_contact_phone: string | null
-          region_id: string
           state: string | null
           status: string | null
           stripe_location_account_id: string | null
@@ -323,6 +417,7 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           email?: string | null
+          entity_id: string
           hours_of_operation?: string | null
           id?: string
           ip_whitelist?: string[] | null
@@ -334,7 +429,6 @@ export type Database = {
           primary_contact_email?: string | null
           primary_contact_name?: string | null
           primary_contact_phone?: string | null
-          region_id: string
           state?: string | null
           status?: string | null
           stripe_location_account_id?: string | null
@@ -354,6 +448,7 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           email?: string | null
+          entity_id?: string
           hours_of_operation?: string | null
           id?: string
           ip_whitelist?: string[] | null
@@ -365,7 +460,6 @@ export type Database = {
           primary_contact_email?: string | null
           primary_contact_name?: string | null
           primary_contact_phone?: string | null
-          region_id?: string
           state?: string | null
           status?: string | null
           stripe_location_account_id?: string | null
@@ -376,13 +470,94 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "locations_region_id_fkey"
-            columns: ["region_id"]
+            foreignKeyName: "locations_entity_id_fkey"
+            columns: ["entity_id"]
             isOneToOne: false
-            referencedRelation: "regions"
+            referencedRelation: "entities"
             referencedColumns: ["id"]
           },
         ]
+      }
+      organizations: {
+        Row: {
+          address_line_1: string | null
+          address_line_2: string | null
+          billing_address: string | null
+          billing_email: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          industry: string | null
+          logo_url: string | null
+          name: string
+          primary_contact_email: string | null
+          primary_contact_name: string | null
+          primary_contact_phone: string | null
+          state: string | null
+          status: string | null
+          subscription_renewal_date: string | null
+          subscription_status: string | null
+          subscription_tier: string | null
+          tax_id: string | null
+          updated_at: string | null
+          website: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address_line_1?: string | null
+          address_line_2?: string | null
+          billing_address?: string | null
+          billing_email?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name: string
+          primary_contact_email?: string | null
+          primary_contact_name?: string | null
+          primary_contact_phone?: string | null
+          state?: string | null
+          status?: string | null
+          subscription_renewal_date?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          tax_id?: string | null
+          updated_at?: string | null
+          website?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address_line_1?: string | null
+          address_line_2?: string | null
+          billing_address?: string | null
+          billing_email?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name?: string
+          primary_contact_email?: string | null
+          primary_contact_name?: string | null
+          primary_contact_phone?: string | null
+          state?: string | null
+          status?: string | null
+          subscription_renewal_date?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          tax_id?: string | null
+          updated_at?: string | null
+          website?: string | null
+          zip_code?: string | null
+        }
+        Relationships: []
       }
       policies: {
         Row: {
@@ -437,44 +612,6 @@ export type Database = {
             columns: ["location_id"]
             isOneToOne: false
             referencedRelation: "locations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      regions: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          entity_id: string
-          id: string
-          name: string
-          updated_at: string | null
-          uploaded_documents: Json | null
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          entity_id: string
-          id?: string
-          name: string
-          updated_at?: string | null
-          uploaded_documents?: Json | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          entity_id?: string
-          id?: string
-          name?: string
-          updated_at?: string | null
-          uploaded_documents?: Json | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "regions_entity_id_fkey"
-            columns: ["entity_id"]
-            isOneToOne: false
-            referencedRelation: "entities"
             referencedColumns: ["id"]
           },
         ]
@@ -545,7 +682,7 @@ export type Database = {
           created_at: string | null
           entity_id: string | null
           location_id: string | null
-          region_id: string | null
+          organization_id: string | null
           role: string
           updated_at: string | null
           user_id: string
@@ -554,7 +691,7 @@ export type Database = {
           created_at?: string | null
           entity_id?: string | null
           location_id?: string | null
-          region_id?: string | null
+          organization_id?: string | null
           role: string
           updated_at?: string | null
           user_id: string
@@ -563,7 +700,7 @@ export type Database = {
           created_at?: string | null
           entity_id?: string | null
           location_id?: string | null
-          region_id?: string | null
+          organization_id?: string | null
           role?: string
           updated_at?: string | null
           user_id?: string
@@ -584,10 +721,10 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_roles_region_id_fkey"
-            columns: ["region_id"]
+            foreignKeyName: "user_roles_organization_id_fkey"
+            columns: ["organization_id"]
             isOneToOne: false
-            referencedRelation: "regions"
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
